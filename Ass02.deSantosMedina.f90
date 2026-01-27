@@ -60,17 +60,18 @@ MODULE linear_advection
   REAL, INTENT(IN) :: c
   REAL, DIMENSION(:), INTENT(IN) :: phi
   REAL, DIMENSION(:), ALLOCATABLE :: res
-  INTEGER :: n
+  INTEGER :: n, sz
+  
+  sz=SIZE(phi)
 
-  ALLOCATE(res(SIZE(phi)))
+  ALLOCATE(res(sz))
 
-  DO n=1, SIZE(phi)
-   IF (n==SIZE(phi)) THEN
-    res(n) = (1+c) * phi(n) - c * phi(1)
-   ELSE
+  DO n=1, sz-1
     res(n) = (1+c) * phi(n) - c * phi(n+1)
-   END IF
   END DO
+
+  res(sz) = (1+c) * phi(sz) - c * phi(1)
+
  END FUNCTION ftfs
 
  !FTBS scheme:
@@ -79,17 +80,17 @@ MODULE linear_advection
   REAL, INTENT(IN) :: c
   REAL, DIMENSION(:), INTENT(IN) :: phi
   REAL, DIMENSION(:), ALLOCATABLE :: res
-  INTEGER :: n
-  
-  ALLOCATE(res(SIZE(phi)))
+  INTEGER :: n, sz
 
-  DO n=1, SIZE(phi)
-   IF (n==1) THEN
-    res(n) = (1-c) * phi(n) + c * phi(SIZE(phi))
-   ELSE
+  sz=SIZE(phi)
+
+  ALLOCATE(res(sz))
+
+  DO n=2, sz
     res(n) = (1-c) * phi(n) + c * phi(n-1)
-   END IF
   END DO
+
+  res(1) = (1-c) * phi(1) + c * phi(sz)
 
  END FUNCTION ftbs
 
