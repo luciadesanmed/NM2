@@ -141,7 +141,7 @@ PROGRAM ass2
   IF (MOD(t,tp) < dt) THEN
    nn=nn+1
 
-   IF (nn<=5) THEN
+   IF (nn<=nt) THEN
     phi_plot(nn,:) = phi
    END IF
 
