@@ -152,7 +152,7 @@ PROGRAM ass8
  REAL :: x0, x1, dx, dt, c, t, t0, t1, tp, dtdx, h
  REAL, DIMENSION(:), ALLOCATABLE :: x, p_old, p_now, p_new, u_old, u_now, u_new, phi00
  REAL, DIMENSION(:,:), ALLOCATABLE :: p_plot, u_plot
- INTEGER :: nx, n, ios, uni, nn, ii, jj
+ INTEGER :: nt, nx, n, ios, uni, nn, ii, jj
  uni=10
 
  nn= 0
@@ -167,8 +167,9 @@ PROGRAM ass8
  dt = c * dx/ SQRT(h)
  dtdx = dt/dx
  nx = ANINT((x1-x0)/dx) + 1
+ nt = ANINT(t1/tp)
  
- ALLOCATE(x(nx), phi00(nx), u_old(nx), u_now(nx), u_new(nx), p_old(nx), p_now(nx), p_new(nx), p_plot(10,nx), u_plot(10, nx))
+ ALLOCATE(x(nx), phi00(nx), u_old(nx), u_now(nx), u_new(nx), p_old(nx), p_now(nx), p_new(nx), p_plot(nt,nx), u_plot(nt, nx))
 
  x = xvec(x0,x1,dx)
  phi00 = phi0(x)
@@ -195,7 +196,7 @@ PROGRAM ass8
   IF (MOD(t,tp) < dt) THEN
    nn=nn+1
 
-   IF (nn<=10) THEN
+   IF (nn<=nt) THEN
     p_plot(nn,:) = p_now
     u_plot(nn,:) = u_now
    END IF
@@ -239,7 +240,7 @@ PROGRAM ass8
 
   IF (MOD(t,tp) < dt) THEN
    nn=nn+1
-   IF (nn<=10) THEN
+   IF (nn<=nt) THEN
     p_plot(nn, :) = p_now 
     u_plot(nn, :) = u_now    
    END IF
