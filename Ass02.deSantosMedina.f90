@@ -103,7 +103,7 @@ PROGRAM ass2
  REAL :: x0, x1, dx, u, dt, c, t, t0, t1, tp
  REAL, DIMENSION(:), ALLOCATABLE :: x, phi, phi00, phi_new
  REAL, DIMENSION(:,:), ALLOCATABLE :: phi_plot
- INTEGER :: nx, n, ios, uni, nn, ii, jj
+ INTEGER :: nt, nx, n, ios, uni, nn, ii, jj
  uni=10
 
  nn=0
@@ -117,8 +117,9 @@ PROGRAM ass2
  dt = dx / u !With c=1
  c = u * (dt/dx) 
  nx = ANINT((x1-x0)/dx) + 1
+ nt = ANINT(t1/tp)
  
- ALLOCATE(x(nx), phi00(nx), phi(nx), phi_new(nx), phi_plot(5,nx))
+ ALLOCATE(x(nx), phi00(nx), phi(nx), phi_new(nx), phi_plot(nt,nx))
 
  x=xvec(x0,x1,dx)
  phi00=phi0(x)
@@ -151,7 +152,7 @@ PROGRAM ass2
  !Write data for plotting:
  OPEN(UNIT=uni, IOSTAT=ios, FILE='data2.dat', STATUS='new', ACTION='write')
  DO n=1, nx
-  WRITE(uni, *) x(n), phi00(n), phi_plot(1,n), phi_plot(2,n), phi_plot(3,n), phi_plot(4,n), phi_plot(5,n)
+  WRITE(uni, *) x(n), phi00(n), phi_plot(:,n)
  END DO 
 
  CLOSE(uni)
