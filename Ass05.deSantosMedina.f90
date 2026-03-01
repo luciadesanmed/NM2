@@ -84,7 +84,7 @@ PROGRAM ass5
  REAL :: x0, x1, dx, k, dt, t, t0, t1, tp, bc0, bc1
  REAL, DIMENSION(:), ALLOCATABLE :: x, phi_now, phi00, phi_new
  REAL, DIMENSION(:,:), ALLOCATABLE :: phi_plot
- INTEGER :: nx, n, ios, uni, nn
+ INTEGER :: nt, nx, n, ios, uni, nn
  uni=10
 
  nn = 0
@@ -99,8 +99,9 @@ PROGRAM ass5
  bc0 = 273.15
  bc1 = 273.15
  nx = ANINT((x1-x0)/dx) + 1
+ nt = ANINT(t1/tp)
  
- ALLOCATE(x(nx), phi00(nx), phi_now(nx), phi_new(nx), phi_plot(6,nx))
+ ALLOCATE(x(nx), phi00(nx), phi_now(nx), phi_new(nx), phi_plot(nt,nx))
 
  x = xvec(x0,x1,dx)
  phi00 = phi0(x)
@@ -118,7 +119,7 @@ PROGRAM ass5
   IF (MOD(t,tp) < dt) THEN
    nn=nn+1
 
-   IF (nn<=6) THEN
+   IF (nn<=nt) THEN
     phi_plot(nn,:) = phi_now
    END IF
 
@@ -129,8 +130,7 @@ PROGRAM ass5
  !Write data for plotting:
  !OPEN(UNIT=uni, IOSTAT=ios, FILE='data5.dat', STATUS='new', ACTION='write')
  !DO n=1, nx
- ! WRITE(uni, *) x(n), phi00(n), phi_plot(1,n), phi_plot(2,n), phi_plot(3,n), phi_plot(4,n), &
- !         phi_plot(5,n), phi_plot(6,n)
+ ! WRITE(uni, *) x(n), phi00(n), phi_plot(:,n)
  !END DO 
 
  !CLOSE(uni)
